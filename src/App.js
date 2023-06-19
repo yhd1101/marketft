@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import Main from './pages/Main'
+import {RouterProvider} from "react-router-dom";
+import router from "./router"
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import i18n from "./lang/i18n";
+import LocaleContext from "./LocaleContext";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [locale, setLocale] = useState(i18n.language)
+
+    i18n.on("languageChanged", (lng) => setLocale(i18n.language))
+    return (
+        <LocaleContext.Provider value={{locale, setLocale}}>
+            <div>
+                <Header />
+                <RouterProvider router={router} />
+                <Footer />
+            </div>
+        </LocaleContext.Provider>
+    );
+};
 
 export default App;
