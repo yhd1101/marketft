@@ -140,8 +140,8 @@ const Main = () => {
                 </Spinner>
             )}
             <Row>
-                {products && products.map(product => (
-                    <Col className={"mt-5"}>
+                {products && products.map((product) => (
+                    <Col className={"mt-5"} key={product._id}>
                         <Card style={{ width: '18rem' }}>
                             <Card.Img variant="top" style={{height: '250px', width: '100%'}} src={product.picture} />
                             <Card.Body>
@@ -151,7 +151,7 @@ const Main = () => {
                                 </Card.Text>
                                 <Stack direction="horizontal" className={"me-lg-2"}>
                                     {product?.category?.map(c => (
-                                        <div style={{margin: "3px"}}>
+                                        <div style={{margin: "3px"}} key={c}>
                                             <h4>
                                                 <Badge pill bg="secondary">{c}</Badge>
                                             </h4>

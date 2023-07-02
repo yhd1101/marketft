@@ -8,9 +8,12 @@ import {InputText} from "primereact/inputtext";
 import {InputNumber} from "primereact/inputnumber";
 import {InputTextarea} from "primereact/inputtextarea";
 import {Button} from "primereact/button";
+import {useDispatch, useSelector} from "react-redux";
+import {createProduct} from "../actions/productActions";
 
 const RegisterProduct = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const token = localStorage.getItem("token")
     const [name, setName] =useState("")
     const [price, setPrice] = useState(0)
@@ -21,6 +24,12 @@ const RegisterProduct = () => {
     const [picture, setPicture] = useState("")
     const [moneyInfo, setMoneyInfo] = useState({})
     // console.log(price)
+
+    const productCreate = useSelector((state) => state.productCreate)
+    const { loading, success, error } = productCreate
+
+
+
     console.log(token)
 
 
@@ -53,31 +62,40 @@ const RegisterProduct = () => {
 
     const productPost = async (e) => {
         e.preventDefault();
-        try{
-            const config = {
-                headers : {
-                    Authorization : "Bearer " + JSON.parse(token)
-                }
-            }
-            console.log(token)
-            const userInput = {
-                name, price, brand, region, desc1, picture,
-                category: categories.map(item => item.name)
-            }
-            const {status } = await axios.post("http://localhost:9000/product/create", userInput, config)
-             if (status === 200){
-                navigate("/")
-            }
-
-        } catch (err){
-            console.log(err)
-            console.log("+++++++++",e.message)
+        const userInput = {
+            name, price, brand, region, desc1, picture,
+            category: categories.map(item => item.name)
         }
+
+        dispatch(createProduct(userInput))
+
+
+
+        // try{
+        //     const config = {
+        //         headers : {
+        //             Authorization : "Bearer " + JSON.parse(token)
+        //         }
+        //     }
+        //     console.log(token)
+        //
+        //     const {status } = await axios.post("http://localhost:9000/product/create", userInput, config)
+        //      if (status === 200){
+        //         navigate("/")
+        //     }
+        //
+        // } catch (err){
+        //     console.log(err)
+        //     console.log("+++++++++",e.message)
+        // }
     }
 
     useEffect(() => {
         getMoneyInfo();
-    }, [])
+        if(success){
+            navigate("/")
+        }
+    }, [dispatch, navigate, success])
 
 
 

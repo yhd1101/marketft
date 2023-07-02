@@ -6,12 +6,19 @@ import {
     PRODUCT_DETAIL_BY_ID_REQUEST,
     PRODUCTS_GET_ALL_SUCCESS,
     PRODUCT_GET_ALL_FAIL,
-    PRODUCTS_GET_ALL_REQUEST
+    PRODUCTS_GET_ALL_REQUEST,
+    PRODUCT_CREATE_SUCCESS,
+    PRODUCT_CREATE_FAIL,
+    PRODUCT_CREATE_REQUEST
 } from "../constants/productsConstants"
-import {USER_LOGIN_FAIL, USER_LOGIN_REQUEST} from "../constants/userConstants";
 import axios from "axios";
+import {logout} from "./userActions";
 
 const baseURL = "http://localhost:9000/"
+
+const token = localStorage.getItem("token")
+
+
 
 
 export const getProductById = (id) => async (dispatch) => {
@@ -62,7 +69,49 @@ export const getProducts = () => async (dispatch) => {
                     : err.message
         })
     }
-
 }
+
+export const createProduct = (newProduct) => async (dispatch) =>{
+    try {
+        const config = {
+            headers : {
+                Authorization : "Bearer " + JSON.parse(token)
+            }
+        }
+        console.log("Bearer " + JSON.parse(token))
+        dispatch({
+            type : PRODUCT_CREATE_REQUEST
+        })
+        const { status } = await  axios.post(baseURL+"product/create", newProduct, config)
+        if( status === 200) {
+            dispatch({
+                type : PRODUCT_CREATE_SUCCESS,
+                payload : true
+            })
+        }
+    } catch (err){
+        const message = err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message
+        //인증이 안될때
+        if( message === 'Not authorized, token failed'){
+            dispatch(logout())
+        }
+        dispatch({
+            type : PRODUCT_CREATE_FAIL,
+            payload: message
+
+        })
+
+    }
+}
+
+
+
+
+
+
+
+
 
 
