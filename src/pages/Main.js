@@ -1,33 +1,25 @@
-import React, {useContext, useEffect, useState, useTransition} from 'react';
-import axios from "axios";
-import {Badge, Button, Card, Carousel, Col, Container, Row, Stack} from "react-bootstrap";
+import React, {useContext, useEffect} from 'react';
+import {Badge, Button, Card, Carousel, Col, Container, Row, Spinner, Stack} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import i18n from "../lang/i18n";
 import LocaleContext from "../LocaleContext";
-import Header from "../components/Header";
 import { useTranslation } from "react-i18next";
+import {useDispatch, useSelector} from "react-redux";
+import { getProducts } from "../actions/productActions";
 
 const Main = () => {
     const { t } = useTranslation()
+    const dispatch = useDispatch()
     const { locale } = useContext(LocaleContext)
     const navigate = useNavigate()
-    const [products, setProducts] = useState([])
-    const getProducts = async () => {
-        try {
 
-            const result = await axios.get("http://localhost:9000/product/")
-            // console.log(result.data.products)
+    const productList = useSelector((state) => state.productList)
+    const { loading, products, error } = productList
 
-            setProducts(result.data.products)
-            console.log(result.data.products)
-        } catch (err){
-            console.log(err)
-        }
-
-    }
     useEffect(() => {
-        getProducts()
-    }, [])
+        dispatch(getProducts())
+    }, [dispatch])
+
     const changeLocale = (l) => {
         if (locale !== l){
             i18n.changeLanguage(l)
@@ -142,6 +134,11 @@ const Main = () => {
 
             {/*</Carousel>*/}
         <Container className={"mt-5"}>
+            {loading && (
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            )}
             <Row>
                 {products && products.map(product => (
                     <Col className={"mt-5"}>

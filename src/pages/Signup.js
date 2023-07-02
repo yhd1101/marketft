@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
-import axios from "axios";
-import {Button, Container, Form} from "react-bootstrap";
+import React, {useEffect, useState} from 'react';
+import {Button, Form, Spinner} from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {signup} from "../actions/userActions";
 
 
 const Signup = () => {
@@ -13,21 +13,44 @@ const Signup = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
+    const userSignup = useSelector( (state) => state.userSignup)
+    const { loading, error, success } = userSignup
+
     const signupHandler = async (e) => {
         e.preventDefault() //무한반복 안하게할려구
-        try {
-            const userInput = {
-                name, email, password
-            }
-            const result = await axios.post("http://localhost:9000/user/signup", userInput)
-            console.log("+++++++++++++++", result)
+        dispatch(signup(name, email, password))
+        //redux 글로벌 상태관리, 에러 잡기 및 데이터의 흐름을 보기위해서(운영)
+        // try {
+        //     const userInput = {
+        //         name, email, password
+        //     }
+        //     const result = await axios.post("http://localhost:9000/user/signup", userInput)
+        //     console.log("+++++++++++++++", result)
+        //
+        // } catch (err){
+        //     console.log(err)
+        // }
 
-        } catch (err){
-            console.log(err)
-        }
     }
+
+    useEffect(() => {
+        if(success){
+            navigate("/login")
+        }
+    },  [navigate, success])
     return (
+        <>
+            {/*{error && (*/}
+            {/*    <Alert variant={"danger"}>*/}
+            {/*        {error}*/}
+            {/*    </Alert>*/}
+            {/*)}*/}
         <FormContainer title={"Signup"}>
+            {loading && (
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            )}
             <Form className={"mt-5"} onSubmit={signupHandler}>
                 <Form.Group controlId="formEmail">
                     <Form.Label>Email</Form.Label>
@@ -64,7 +87,7 @@ const Signup = () => {
                 </Button>
             </Form>
         </FormContainer>
-
+        </>
     );
 };
 

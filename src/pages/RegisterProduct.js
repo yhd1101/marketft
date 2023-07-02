@@ -36,7 +36,7 @@ const RegisterProduct = () => {
         { name: 'sports', code: 'sports'},
         { name: 'socks', code: 'socks'},
         {name: 'beauty', code: 'beauty'},
-        {name: 'onepiece', code: 'oncpiece'}
+        {name: 'onepiece', code: 'onepiece'}
     ];
 
     const getMoneyInfo = async () => {
@@ -64,7 +64,7 @@ const RegisterProduct = () => {
                 name, price, brand, region, desc1, picture,
                 category: categories.map(item => item.name)
             }
-            const {data, status } = await axios.post("http://localhost:9000/product/create", userInput, config)
+            const {status } = await axios.post("http://localhost:9000/product/create", userInput, config)
              if (status === 200){
                 navigate("/")
             }

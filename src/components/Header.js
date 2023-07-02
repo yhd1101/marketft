@@ -61,7 +61,7 @@ const Header = () => {
                         </Nav>
                         <Nav>
                             <Nav.Link href="#deets">{t("Selling")}</Nav.Link>
-                            <Nav.Link href={"/register/product"}>Product Post</Nav.Link>
+                            <Nav.Link href={"/register/product"}>{t("Product Post")}</Nav.Link>
                             <Nav.Link href={"/job"}>
                                 {t("Job")}
                             </Nav.Link>

@@ -140,14 +140,13 @@ const ProductDetail = () => {
                                 <h5>{productInfo.name}</h5>
                             </ListGroup.Item>
                             <ListGroup.Item>
-                                <h5>{t("Price")} :${productInfo.price
-                                    ? (
+                                <h5>{t("Price")} :${productInfo.price}
+
                                         <Container>
                                             <h5>korea is {productInfo.price * moneyInfo?.rates?.KRW.slice(0,5)}원</h5>
                                             <h5>Japan is {productInfo.price * moneyInfo?.rates?.JPY.slice(0,5)}엔</h5>
                                         </Container>
-                                    )
-                                    : null}</h5>
+                                </h5>
                             </ListGroup.Item>
                             <ListGroup.Item>
                                 <h5>{t("Brand")}: {productInfo.brand  ? productInfo.brand : "내용없음"}</h5>

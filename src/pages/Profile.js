@@ -114,9 +114,9 @@ const Profile = () => {
                     <tbody>
                     {reservations && reservations?.map(r => (
                         <tr key={r._id}>
-                            <td>{r._id.slice(20,25)}</td>
-                            <td>{r.product.name}</td>
-                            <td>{r.promise.slice(1,11)}</td>
+                            <td>{r._id.slice(20, 25)}</td>
+                            <td>{r.product && r.product.name}</td>
+                            <td>{r.promise.slice(1, 11)}</td>
                             <td>{r.location}</td>
                             <td>구매</td>
                         </tr>
