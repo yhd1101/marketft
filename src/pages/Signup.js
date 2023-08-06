@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, Spinner} from "react-bootstrap";
+import {Button, Container, Form, Spinner, Row, Col} from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {signup} from "../actions/userActions";
+import axios from "axios";
 
 
 const Signup = () => {
@@ -12,13 +13,16 @@ const Signup = () => {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [emailVerifyNumber, setEmailVerifyNumber] = useState("")
+    const [codeShow, setCodeShow] = useState(false)
 
     const userSignup = useSelector( (state) => state.userSignup)
     const { loading, error, success } = userSignup
 
     const signupHandler = async (e) => {
         e.preventDefault() //무한반복 안하게할려구
-        dispatch(signup(name, email, password))
+        // dispatch(signup(name, email, password))
+        console.log("signup")
         //redux 글로벌 상태관리, 에러 잡기 및 데이터의 흐름을 보기위해서(운영)
         // try {
         //     const userInput = {
@@ -30,6 +34,41 @@ const Signup = () => {
         // } catch (err){
         //     console.log(err)
         // }
+
+    }
+
+    const sendEmailVerifyCode = async (e) => {
+        e.preventDefault()
+        // setCodeShow(true)
+        try{
+            const userInput = {
+                email
+            }
+            const {status} = await axios.post("http://localhost:8000/api/auth/send/email", userInput)
+            if(status === 201) {
+                setCodeShow(true)
+            }
+        } catch (err) {
+            console.log(err.message)
+        }
+    }
+
+
+    const confirmEmailVerify = async (e) => {
+        e.preventDefault()
+        try {
+            const userInput = {
+                email, code: emailVerifyNumber
+            }
+            const { status } = await axios.post("http://localhost:8000/api/auth/confirm/email", userInput)
+            console.log(status)
+            if (status === 201) {
+                alert("인증됌")
+                setCodeShow(false)
+            }
+        } catch (err) {
+            console.log(err.messsage)
+        }
 
     }
 
@@ -51,7 +90,7 @@ const Signup = () => {
                     <span className="visually-hidden">Loading...</span>
                 </Spinner>
             )}
-            <Form className={"mt-5"} onSubmit={signupHandler}>
+            <Form className={"mt-5"} >
                 <Form.Group controlId="formEmail">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
@@ -62,7 +101,40 @@ const Signup = () => {
                     />
                 </Form.Group>
 
-                <Form.Group controlId="formPassword">
+                <Button  variant="primary" onClick={sendEmailVerifyCode} className="w-100 mt-4 mb-3">
+                    인증하기
+                </Button>
+
+                {codeShow && (
+                    <Container>
+                        <Form.Group  className={"p-3" } style={{backgroundColor: "#faf5f5", height: "130px"}} controlId="formPassword">
+                            <Row>
+                                <Col>
+                                    <Form.Label className={"mb-4"}>이메일로 전송된 인증코드를 입력해주세요.</Form.Label>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col sm={8}>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="인증코드"
+                                        value={emailVerifyNumber}
+                                        onChange={e => setEmailVerifyNumber(e.target.value)}
+                                    />
+                                </Col>
+                                <Col sm={4}>
+                                    <Button  variant="primary" onClick={confirmEmailVerify} className="w-100">
+                                        인증하기
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </Form.Group>
+                    </Container>
+                )}
+
+
+
+                <Form.Group  className={"mt-4"} controlId="formPassword">
                     <Form.Label>Password</Form.Label>
                     <Form.Control
                         type="password"
@@ -82,7 +154,7 @@ const Signup = () => {
                     />
                 </Form.Group>
 
-                <Button variant="primary" type="submit" className="w-100 mt-4">
+                <Button variant="primary" onClick={signupHandler} className="w-100 mt-4">
                     Submit
                 </Button>
             </Form>

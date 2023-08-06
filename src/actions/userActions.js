@@ -4,7 +4,7 @@ import {
     USER_LOGIN_SUCCESS, USER_LOGOUT, USER_SIGNUP_FAIL, USER_SIGNUP_REQUEST, USER_SIGNUP_SUCCESS
 } from "../constants/userConstants";
 import axios from "axios";
-const userBaseURL ="http://localhost:9000/user/"
+const userBaseURL ="http://localhost:8000/api/auth/"
 
 //로그인 함수
 export const login = (email, password) => async (dispatch) => {
@@ -12,6 +12,7 @@ export const login = (email, password) => async (dispatch) => {
         dispatch({
             type:USER_LOGIN_REQUEST
         })
+        console.log(userBaseURL + "login")
         const {data, status} = await axios.post(userBaseURL + "login", {email, password})
         if(status === 200){
             dispatch({
