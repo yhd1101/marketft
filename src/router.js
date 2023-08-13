@@ -9,6 +9,8 @@ import JobDetail from "./pages/JobDetail"
 import Profile from "./pages/Profile";
 import RegisterProduct from "./pages/RegisterProduct";
 import UserProducts from "./pages/UserProducts";
+import ChangePassword from "./pages/ChangePassword";
+import FindPassword from "./pages/FindPassword";
 
 const router = createBrowserRouter([
     {
@@ -46,6 +48,14 @@ const router = createBrowserRouter([
     {
         path:"/user/:id",
         element: <UserProducts/>
+    },
+    {
+        path:"/change/password",
+        element: <ChangePassword/>
+    },
+    {
+        path:"/find/password",
+        element: <FindPassword/>
     }
 
 ])

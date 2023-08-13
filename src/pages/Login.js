@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import FormContainer from "../components/FormContainer";
-import {Button, Form} from "react-bootstrap";
+import {Button, Container, Form, Row, Col} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {login} from "../actions/userActions";
@@ -25,32 +25,48 @@ const Login = () => {
         dispatch(login(email, password))
     }
     return (
-        <FormContainer title={"Login"}>
-            <Form className={"mt-5"} onSubmit={loginHandler}>
-                <Form.Group controlId="formEmail">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                        type="email"
-                        placeholder="Enter email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                    />
-                </Form.Group>
+        <>
+            <FormContainer title={"Login"}>
+                <Form className={"mt-5"} onSubmit={loginHandler}>
+                    <Form.Group controlId="formEmail">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                            type="email"
+                            placeholder="Enter email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
+                    </Form.Group>
 
-                <Form.Group controlId="formPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                </Form.Group>
-                <Button variant="primary" type="submit" className="w-100 mt-4">
-                    Submit
-                </Button>
-            </Form>
-        </FormContainer>
+                    <Form.Group controlId="formPassword">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Button variant="primary" type="submit" className="w-100 mt-4">
+                        Submit
+                    </Button>
+                </Form>
+            </FormContainer>
+            <Container>
+                <Row className={"justify-content-md-center mt-5"}>
+                    <Col xs lg="2">
+                        <Button variant={"link"} onClick={() => navigate("/find/password")}>
+                            find password?
+                        </Button>
+                    </Col>
+                    <Col xs lg="3">
+                        <Button variant={"link"} onClick={() => navigate("/signup")}>
+                            signup
+                        </Button>
+                    </Col>
+                </Row>
+            </Container>
+       </>
 
     );
 };
