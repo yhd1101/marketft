@@ -74,11 +74,10 @@ export const getProducts = () => async (dispatch) => {
 export const createProduct = (newProduct) => async (dispatch) =>{
     try {
         const config = {
-            headers : {
-                Authorization : "Bearer " + JSON.stringify(token)
+            headers: {
+                Authorization: "Bearer " + token
             }
         }
-        console.log("Bearer " + JSON.parse(token))
         dispatch({
             type : PRODUCT_CREATE_REQUEST
         })
@@ -91,6 +90,7 @@ export const createProduct = (newProduct) => async (dispatch) =>{
             })
         }
     } catch (err){
+        console.log(err)
         const message = err.response && err.response.data.message
             ? err.response.data.message
             : err.message

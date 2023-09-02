@@ -14,7 +14,6 @@ import {createProduct} from "../actions/productActions";
 const RegisterProduct = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const token = localStorage.getItem("token")
     const [name, setName] =useState("")
     const [price, setPrice] = useState("")
     const [brand, setBrand] = useState("")
@@ -25,13 +24,11 @@ const RegisterProduct = () => {
     const [moneyInfo, setMoneyInfo] = useState({})
     // console.log(price)
 
-    // const productCreate = useSelector((state) => state.productCreate)
-    // const { loading, success, error } = productCreate
+    const productCreate = useSelector((state) => state.productCreate)
+    const { loading, success, error } = productCreate
 
 
 
-
-    console.log(typeof price)
 
     const categoryList = [
         { name: 'digital', code: 'digital' },
@@ -66,37 +63,38 @@ const RegisterProduct = () => {
             category: categories.map(item => item.name)
         }
         console.log("++++++",userInput)
+        dispatch(createProduct(userInput))
 
 
 
-        try{
-            const config = {
-                headers : {
-                    Authorization : "Bearer " + token
-                }
-            }
-
-            console.log("-----------------",config)
-
-
-
-            const {status } = await axios.post("http://localhost:8000/api/product/create", userInput, config)
-             if (status === 201){
-                navigate("/")
-            }
-
-        } catch (err){
-            console.log(err)
-            console.log("+++++++++",e.message)
-        }
+        // try{
+        //     const config = {
+        //         headers : {
+        //             Authorization : "Bearer " + token
+        //         }
+        //     }
+        //
+        //     console.log("-----------------",config)
+        //
+        //
+        //
+        //     const {status } = await axios.post("http://localhost:8000/api/product/create", userInput, config)
+        //      if (status === 201){
+        //         navigate("/")
+        //     }
+        //
+        // } catch (err){
+        //     console.log(err)
+        //     console.log("+++++++++",e.message)
+        // }
     }
 
-    // useEffect(() => {
-    //     getMoneyInfo();
-    //     if(success){
-    //         navigate("/")
-    //     }
-    // }, [dispatch, navigate, success])
+    useEffect(() => {
+        getMoneyInfo();
+        if(success){
+            navigate("/")
+        }
+    }, [dispatch, navigate, success])
 
 
 
