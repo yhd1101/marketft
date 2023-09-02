@@ -16,25 +16,22 @@ const RegisterProduct = () => {
     const dispatch = useDispatch()
     const token = localStorage.getItem("token")
     const [name, setName] =useState("")
-    const [price, setPrice] = useState(0)
+    const [price, setPrice] = useState("")
     const [brand, setBrand] = useState("")
     const [region, setRegion] = useState("")
-    const [desc1, setDesc1] = useState("")
+    const [desc1, setDesc1] = useState([])
     const [categories, setCategories] = useState([])
-    const [picture, setPicture] = useState("")
+    const [picture, setPicture] = useState([])
     const [moneyInfo, setMoneyInfo] = useState({})
     // console.log(price)
 
-    const productCreate = useSelector((state) => state.productCreate)
-    const { loading, success, error } = productCreate
+    // const productCreate = useSelector((state) => state.productCreate)
+    // const { loading, success, error } = productCreate
 
 
 
-    console.log(token)
 
-
-
-    console.log(categories)
+    console.log(typeof price)
 
     const categoryList = [
         { name: 'digital', code: 'digital' },
@@ -62,40 +59,44 @@ const RegisterProduct = () => {
 
     const productPost = async (e) => {
         e.preventDefault();
+        console.log("++++++++++++++++++++++")
         const userInput = {
-            name, price, brand, region, desc1, picture,
+            name, price, brand, region,
+            desc:[desc1], productImg:[picture],
             category: categories.map(item => item.name)
         }
-
-        dispatch(createProduct(userInput))
-
+        console.log("++++++",userInput)
 
 
-        // try{
-        //     const config = {
-        //         headers : {
-        //             Authorization : "Bearer " + JSON.parse(token)
-        //         }
-        //     }
-        //     console.log(token)
-        //
-        //     const {status } = await axios.post("http://localhost:9000/product/create", userInput, config)
-        //      if (status === 200){
-        //         navigate("/")
-        //     }
-        //
-        // } catch (err){
-        //     console.log(err)
-        //     console.log("+++++++++",e.message)
-        // }
+
+        try{
+            const config = {
+                headers : {
+                    Authorization : "Bearer " + token
+                }
+            }
+
+            console.log("-----------------",config)
+
+
+
+            const {status } = await axios.post("http://localhost:8000/api/product/create", userInput, config)
+             if (status === 201){
+                navigate("/")
+            }
+
+        } catch (err){
+            console.log(err)
+            console.log("+++++++++",e.message)
+        }
     }
 
-    useEffect(() => {
-        getMoneyInfo();
-        if(success){
-            navigate("/")
-        }
-    }, [dispatch, navigate, success])
+    // useEffect(() => {
+    //     getMoneyInfo();
+    //     if(success){
+    //         navigate("/")
+    //     }
+    // }, [dispatch, navigate, success])
 
 
 

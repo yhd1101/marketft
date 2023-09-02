@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import {logout} from "./userActions";
 
-const baseURL = "http://localhost:9000/"
+const baseURL = "http://localhost:8000/api/product"
 
 const token = localStorage.getItem("token")
 
@@ -26,7 +26,7 @@ export const getProductById = (id) => async (dispatch) => {
         dispatch({
             type:PRODUCT_DETAIL_BY_ID_REQUEST
         })
-        const { data, status } = await axios.get(baseURL+`product/${id}`)
+        const { data, status } = await axios.get(baseURL+`${id}`)
         if (status === 200) {
             dispatch({
                 type : PRODUCT_DETAIL_BY_ID_SUCCESS,
@@ -52,7 +52,7 @@ export const getProducts = () => async (dispatch) => {
         dispatch({
             type : PRODUCTS_GET_ALL_REQUEST
         })
-        const {status, data} = await axios.get("http://localhost:9000/product/")
+        const {status, data} = await axios.get("http://localhost:8000/api/product")
         if(status === 200){
             dispatch({
                 type : PRODUCTS_GET_ALL_SUCCESS,
@@ -75,15 +75,16 @@ export const createProduct = (newProduct) => async (dispatch) =>{
     try {
         const config = {
             headers : {
-                Authorization : "Bearer " + JSON.parse(token)
+                Authorization : "Bearer " + JSON.stringify(token)
             }
         }
         console.log("Bearer " + JSON.parse(token))
         dispatch({
             type : PRODUCT_CREATE_REQUEST
         })
-        const { status } = await  axios.post(baseURL+"product/create", newProduct, config)
-        if( status === 200) {
+        const { status } = await  axios.post(`${baseURL}/create`, newProduct, config)
+        console.log(newProduct)
+        if( status === 201) {
             dispatch({
                 type : PRODUCT_CREATE_SUCCESS,
                 payload : true

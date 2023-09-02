@@ -15,6 +15,7 @@ const Signup = () => {
     const [password, setPassword] = useState("")
     const [emailVerifyNumber, setEmailVerifyNumber] = useState("")
     const [codeShow, setCodeShow] = useState(false)
+    const [goolgeLogin, setGoogleLogin] = useState([])
 
     const userSignup = useSelector( (state) => state.userSignup)
     const { loading, error, success } = userSignup
@@ -36,6 +37,21 @@ const Signup = () => {
         // }
 
     }
+
+    const googleLogin = async (e) => {
+        e.preventDefault()
+
+        try{
+            const { status } = await axios.get("http://localhost:8000/api/auth/google")
+            if(status === 201) {
+                setGoogleLogin(status)
+            }
+
+        } catch (err) {
+            console.log(err.message)
+        }
+    }
+
 
     const sendEmailVerifyCode = async (e) => {
         e.preventDefault()
@@ -153,6 +169,14 @@ const Signup = () => {
                         onChange={e => setName(e.target.value)}
                     />
                 </Form.Group>
+
+                <Button  variant="primary" href={"http://localhost:8000/api/auth/google"} className="w-100 mt-4 mb-3">
+                    구글로그인
+                </Button>
+
+                <Button  variant="primary" onClick={sendEmailVerifyCode} className="w-100 mt-4 mb-3">
+                    인증하기
+                </Button>
 
                 <Button variant="primary" onClick={signupHandler} className="w-100 mt-4">
                     Submit

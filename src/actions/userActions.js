@@ -20,7 +20,7 @@ export const login = (email, password) => async (dispatch) => {
                 payload:data.user
             })
             localStorage.setItem("userInfo",JSON.stringify(data.user))
-            localStorage.setItem("token", JSON.stringify(data.token))
+            localStorage.setItem("token", data.token)
         }
 
     } catch (err){
