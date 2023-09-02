@@ -1,4 +1,6 @@
-import React, {useContext, useEffect} from 'react';
+
+
+import React, {useContext, useEffect, useState} from 'react';
 import {Badge, Button, Card, Carousel, Col, Container, Row, Spinner, Stack} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import i18n from "../lang/i18n";
@@ -6,6 +8,7 @@ import LocaleContext from "../LocaleContext";
 import { useTranslation } from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
 import { getProducts } from "../actions/productActions";
+import axios from "axios";
 
 const Main = () => {
     const { t } = useTranslation()
@@ -19,6 +22,8 @@ const Main = () => {
     useEffect(() => {
         dispatch(getProducts())
     }, [dispatch])
+
+
 
     const changeLocale = (l) => {
         if (locale !== l){
@@ -39,33 +44,6 @@ const Main = () => {
                 return ""
         }
     }
-
-    // const carouselData = [
-    //     {
-    //         "id" : 1,
-    //         "title" : "중고거래",
-    //         "desc" : "당신의 중고물품, 새로운 주인을 찾습니다.",
-    //         "img" : "https://cdn.discordapp.com/attachments/965926129246556200/1102610841804734484/dress-2583113_1920.jpg"
-    //
-    //     },
-    //
-    //     {
-    //         "id" : 2,
-    //         "title" : "부동산",
-    //         "desc" : "당신의 꿈을 코리아 마켓에서 만나보세요!",
-    //         "img" : "https://cdn.discordapp.com/attachments/965926129246556200/1102611482073640981/house-2469110.jpg"
-    //     },
-    //     {
-    //         "id" : 3,
-    //         "title" : "구인구직",
-    //         "desc" : "새로운 일터를 코리아 마켓에서 쉽고 빠르게 찾아보세요.",
-    //         "img" : "https://cdn.discordapp.com/attachments/965926129246556200/1102611933435273367/neckties-210347.jpg"
-    //     }
-    // ]
-
-
-
-
 
 
 
@@ -115,24 +93,7 @@ const Main = () => {
                     </Carousel.Caption>
                 </Carousel.Item>
             </Carousel>
-            {/*<Carousel nextLabel={""} prevLabel={""}>*/}
-            {/*    {carouselData && carouselData.map(item => (*/}
-            {/*        <Carousel.Item key={item.id}>*/}
-            {/*            <img*/}
-            {/*                className="d-block w-100"*/}
-            {/*                src={item.img}*/}
-            {/*                alt="First slide"*/}
-            {/*                style={{ height : "530px"}}*/}
-            {/*            />*/}
-            {/*            <Carousel.Caption>*/}
-            {/*                <h1 style={{color: 'white', fontWeight: 'bold', fontSize: '64px', position: 'absolute',left: '50px', bottom: '100px'}}>{item.title}</h1>*/}
-            {/*                <br/>*/}
-            {/*                <h3 style={{color: 'white', fontWeight: 'bold', fontSize: '25px', position: 'absolute', left: '50px', bottom: '60px'}}>{item.desc}</h3>*/}
-            {/*            </Carousel.Caption>*/}
-            {/*        </Carousel.Item>*/}
-            {/*    ))}*/}
 
-            {/*</Carousel>*/}
         <Container className={"mt-5"}>
             {loading && (
                 <Spinner animation="border" role="status">
@@ -143,11 +104,11 @@ const Main = () => {
                 {products && products.map((product) => (
                     <Col className={"mt-5"} key={product._id}>
                         <Card style={{ width: '18rem' }}>
-                            <Card.Img variant="top" style={{height: '250px', width: '100%'}} src={product.picture} />
+                            <Card.Img variant="top" style={{height: '250px', width: '100%'}} src={product.productImg[0]} />
                             <Card.Body>
                                 <Card.Title>{product.name.slice(0,15)}</Card.Title>
                                 <Card.Text>
-                                    {product.desc1.slice(0,15)}...
+                                    {product.desc[0].slice(0,15)}...
                                 </Card.Text>
                                 <Stack direction="horizontal" className={"me-lg-2"}>
                                     {product?.category?.map(c => (

@@ -37,9 +37,9 @@ export const getProductByIdReducer = (state = {}, action) => {
 export const getProductsReducer = (state = {products : []}, action) => {
     switch (action.type) {
         case PRODUCTS_GET_ALL_REQUEST:
-            return {loading : true, products: []}
+            return {loading : true}
         case PRODUCTS_GET_ALL_SUCCESS:
-            return { loading: false, products : action.payload.products}
+            return { loading: false, products : action.payload}
         case PRODUCT_GET_ALL_FAIL:
             return {loading: false, error : action.payload}
 

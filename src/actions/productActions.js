@@ -47,12 +47,16 @@ export const getProductById = (id) => async (dispatch) => {
 }
 
 export const getProducts = () => async (dispatch) => {
+    console.log("llllllllllllll")
     try {
 
         dispatch({
             type : PRODUCTS_GET_ALL_REQUEST
         })
+        console.log("qqqqqqqqqqqqqqq")
         const {status, data} = await axios.get("http://localhost:8000/api/product")
+        console.log("mmmmmmmmmmmmmmmm")
+        console.log(status)
         if(status === 200){
             dispatch({
                 type : PRODUCTS_GET_ALL_SUCCESS,
@@ -61,6 +65,7 @@ export const getProducts = () => async (dispatch) => {
         }
 
     } catch (err){
+        console.log("eeeeeeeeeeeeeeeeee")
         dispatch({
             type : PRODUCT_GET_ALL_FAIL,
             payload :
