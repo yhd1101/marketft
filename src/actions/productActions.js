@@ -47,7 +47,6 @@ export const getProductById = (id) => async (dispatch) => {
 }
 
 export const getProducts = () => async (dispatch) => {
-    console.log("llllllllllllll")
     try {
 
         dispatch({
@@ -80,7 +79,7 @@ export const createProduct = (newProduct) => async (dispatch) =>{
     try {
         const config = {
             headers: {
-                Authorization: "Bearer " + token
+                Authorization: "Bearer " +token
             }
         }
         dispatch({

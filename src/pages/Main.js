@@ -15,13 +15,27 @@ const Main = () => {
     const dispatch = useDispatch()
     const { locale } = useContext(LocaleContext)
     const navigate = useNavigate()
+    const [products, setProducts] = useState([])
 
-    const productList = useSelector((state) => state.productList)
-    const { loading, products, error } = productList
+    // const productList = useSelector((state) => state.productList)
+    // const { loading, products, error } = productList
+
+    const productList = async ()=> {
+        try{
+            const { data, status} = await axios.get("http://localhost:8000/api/product/")
+            if(status === 200) {
+                setProducts(data.products)
+            }
+
+        } catch (err){
+            console.log(err)
+        }
+    }
 
     useEffect(() => {
-        dispatch(getProducts())
-    }, [dispatch])
+        productList()
+        // dispatch(getProducts())
+    }, [])
 
 
 
@@ -95,14 +109,11 @@ const Main = () => {
             </Carousel>
 
         <Container className={"mt-5"}>
-            {loading && (
-                <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </Spinner>
-            )}
             <Row>
+
+                <h1 className={"mb-3"}>전체상품</h1>
                 {products && products.map((product) => (
-                    <Col className={"mt-5"} key={product._id}>
+                    <Col className={"mt-5"} key={product.id}>
                         <Card style={{ width: '18rem' }}>
                             <Card.Img variant="top" style={{height: '250px', width: '100%'}} src={product.productImg[0]} />
                             <Card.Body>
@@ -119,7 +130,33 @@ const Main = () => {
                                         </div>
                                     ))}
                                 </Stack>
-                                <Button onClick={() => navigate(`/product/${product._id}`)}>Go Detail</Button>
+                                <Button onClick={() => navigate(`/product/${product.id}`)}>Go Detail</Button>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+            <Row>
+                <h1 className={"mt-5"}>인기 조회수</h1>
+                {products && products.map((product) => (
+                    <Col className={"mt-5"} key={product.id}>
+                        <Card style={{ width: '18rem' }}>
+                            <Card.Img variant="top" style={{height: '250px', width: '100%'}} src={product.productImg[0]} />
+                            <Card.Body>
+                                <Card.Title>{product.name.slice(0,15)}</Card.Title>
+                                <Card.Text>
+                                    {product.desc[0].slice(0,15)}...
+                                </Card.Text>
+                                <Stack direction="horizontal" className={"me-lg-2"}>
+                                    {product?.category?.map(c => (
+                                        <div style={{margin: "3px"}} key={c}>
+                                            <h4>
+                                                <Badge pill bg="secondary">{c}</Badge>
+                                            </h4>
+                                        </div>
+                                    ))}
+                                </Stack>
+                                <Button onClick={() => navigate(`/product/${product.id}`)}>Go Detail</Button>
                             </Card.Body>
                         </Card>
                     </Col>

@@ -16,6 +16,16 @@ const Signup = () => {
     const [emailVerifyNumber, setEmailVerifyNumber] = useState("")
     const [codeShow, setCodeShow] = useState(false)
     const [goolgeLogin, setGoogleLogin] = useState([])
+    const userData = [
+        { name: "동의합니다." },
+        { name: "동의합니다." },
+        { name: "동의합니다." },
+        { name: "동의합니다." },
+        { name: "동의합니다." }
+    ];
+
+    const [users, setUsers] = useState([]);
+
 
     const userSignup = useSelector( (state) => state.userSignup)
     const { loading, error, success } = userSignup
@@ -51,6 +61,21 @@ const Signup = () => {
             console.log(err.message)
         }
     }
+
+    const handleChange = (e) => {
+        const { name, checked } = e.target;
+        if (name === "allSelect") {
+            let tempUser = users.map((user) => {
+                return { ...user, isChecked: checked };
+            });
+            setUsers(tempUser);
+        } else {
+            let tempUser = users.map((user) =>
+                user.name === name ? { ...user, isChecked: checked } : user
+            );
+            setUsers(tempUser);
+        }
+    };
 
 
     const sendEmailVerifyCode = async (e) => {
@@ -92,6 +117,7 @@ const Signup = () => {
         if(success){
             navigate("/login")
         }
+        setUsers(userData)
     },  [navigate, success])
     return (
         <>
@@ -119,6 +145,17 @@ const Signup = () => {
 
                 <Button  variant="primary" onClick={sendEmailVerifyCode} className="w-100 mt-4 mb-3">
                     인증하기
+                </Button>
+
+                <Form.Control
+                    type="text"
+                    placeholder="인증코드"
+                    value={emailVerifyNumber}
+                    onChange={e => setEmailVerifyNumber(e.target.value)}
+                />
+
+                <Button  variant="primary" className="w-100 mt-4 mb-3">
+                    인증번호 입력
                 </Button>
 
                 {codeShow && (
@@ -169,6 +206,34 @@ const Signup = () => {
                         onChange={e => setName(e.target.value)}
                     />
                 </Form.Group>
+                <form className="form w-100">
+                    <h3>Select Users</h3>
+                    <div className="form-check">
+                        <input
+                            type="checkbox"
+                            className="form-check-input"
+                            name="allSelect"
+                            // checked={
+                            //   users.filter((user) => user?.isChecked !== true).length < 1
+                            // }
+                            checked={!users.some((user) => user?.isChecked !== true)}
+                            onChange={handleChange}
+                        />
+                        <label className="form-check-label ms-2">All Select</label>
+                    </div>
+                        {users.map((user, index) =>(
+                            <Container className="form-check" key={index}>
+                                <input
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    name={user.name}
+                                    checked={user?.isChecked || false}
+                                    onChange={handleChange}
+                                />
+                                <label className="form-check-label ms-2">{user.name}</label>
+                            </Container>
+                        ))}
+                </form>
 
                 <Button  variant="primary" href={"http://localhost:8000/api/auth/google"} className="w-100 mt-4 mb-3">
                     구글로그인

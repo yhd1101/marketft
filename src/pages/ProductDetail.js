@@ -17,6 +17,7 @@ const ProductDetail = () => {
 
     const { t } = useTranslation()
     const { productId } = useParams()
+    console.log(productId)
     const [productInfo, setProductInfo] = useState({})
     const [relatedProducts, setRelatedProducts ] = useState([])
     const [dateTime, setDateTime] = useState("")
@@ -25,12 +26,12 @@ const ProductDetail = () => {
     const [location, setLocation] = useState("")
     const [resShow, setResShow] = useState(false)
     const [moneyInfo, setMoneyInfo] = useState({})
-    console.log(dateTime)
+    // console.log(dateTime)
     // const dispatch = useDispatch()
 
     // const productById = useSelector((state) => state.productById)
     // const { loading, error, product} = productById
-    console.log(resShow)
+    // console.log(resShow)
 
 
     const getMoneyInfo = async () => {
@@ -57,16 +58,19 @@ const ProductDetail = () => {
 
     const getProductInfo = async ()=> {
         try{
-            const {data, status} = await axios.get(`http://localhost:9000/product/${productId}`)
-            console.log(data?.product?.category[0],  " -------------------")
-            setProductInfo(data.product)
+            const {data, status} = await axios.get(`http://localhost:8000/api/product/${productId}`)
+            console.log(data)
+            if (status === 200) {
+                setProductInfo(data)
+            }
+
             // console.log(typeof data.product.category[0])
             // console.log(productInfo?.category[0])
-            const result = await axios.get(`http://localhost:9000/product/category/${data.product.category[0]}`)
-            const filteredData = await result.data.product.filter(f => f._id !== productId) //자기자신 제외한 상품 정렬
-            console.log(filteredData,"----------")
-            const resultData = await filteredData.slice(0,4)
-             setRelatedProducts(resultData)
+            // const result = await axios.get(`http://localhost:8000/api/product/category/${data.product.category[0]}`)
+            // const filteredData = await result.data.product.filter(f => f._id !== productId) //자기자신 제외한 상품 정렬
+            // console.log(filteredData,"----------")
+            // const resultData = await filteredData.slice(0,4)
+            //  setRelatedProducts(resultData)
             // console.log(relatedProducts)
 
 
@@ -82,7 +86,7 @@ const ProductDetail = () => {
                 memo, promise: JSON.stringify(dateTime),location
             }
             const token = JSON.parse(localStorage.getItem("token"))
-            console.log(token)
+            // console.log(token)
             const config = {
                 headers : {
                     // Authorization : "Bearer " + localStorage.getItem("token")
@@ -132,7 +136,7 @@ const ProductDetail = () => {
                 <Row>
                     {resShow ?? <h1>{dateTime}</h1>}
                     <Col md={6}>
-                        <Image style={{width: "500px", height: "400px"}} src={productInfo.picture} alt={productInfo.name} fluid/>
+                        <Image style={{width: "500px", height: "400px"}} src={productInfo.productImg} alt={productInfo.name} fluid/>
                     </Col>
                     <Col md={4}>
                         <ListGroup variant={"flush"}>
@@ -164,7 +168,10 @@ const ProductDetail = () => {
                             <Container className={"mt-5 mb-2"}>
                                 <h3>{t("product Description")}</h3>
                             </Container>
-                            <p>{productInfo.desc1}</p>
+                            {productInfo.desc}
+                        {/*    {productInfo.desc.map(i => (*/}
+                        {/*        <p>{i}</p>*/}
+                        {/*    ))}*/}
                             <h3>{t("region")} {productInfo.region}</h3>
                             <MapContainer/>
                         </Col>
@@ -240,11 +247,11 @@ const ProductDetail = () => {
                         {relatedProducts && relatedProducts.map(product => (
                             <Col md={"auto"}>
                                 <Card style={{ width: '18rem' }}>
-                                    <Card.Img variant="top" style={{height: '250px', width: '100%'}} src={product.picture} />
+                                    <Card.Img variant="top" style={{height: '250px', width: '100%'}} src={product.productImg} />
                                     <Card.Body>
                                         <Card.Title>{product.name.slice(0,12)}</Card.Title>
                                         <Card.Text>
-                                            {product.desc1.slice(0,15)}...
+                                            {product.desc.slice(0,15)}...
                                         </Card.Text>
                                         {/*<Button onClick={() => navigate(`/product/${product._id}`)}>Go Detail</Button>*/}
                                     </Card.Body>
