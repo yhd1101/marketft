@@ -8,7 +8,7 @@ import LocaleContext from "../LocaleContext";
 import { useTranslation } from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
 import { getProducts } from "../actions/productActions";
-import axios from "axios";
+
 
 const Main = () => {
     const { t } = useTranslation()

@@ -63,30 +63,30 @@ const RegisterProduct = () => {
             category: categories.map(item => item.name)
         }
         console.log("++++++",userInput)
-        dispatch(createProduct(userInput))
+        // dispatch(createProduct(userInput))
 
 
 
-        // try{
-        //     const config = {
-        //         headers : {
-        //             Authorization : "Bearer " + token
-        //         }
-        //     }
-        //
-        //     console.log("-----------------",config)
-        //
-        //
-        //
-        //     const {status } = await axios.post("http://localhost:8000/api/product/create", userInput, config)
-        //      if (status === 201){
-        //         navigate("/")
-        //     }
-        //
-        // } catch (err){
-        //     console.log(err)
-        //     console.log("+++++++++",e.message)
-        // }
+        try{
+            const config = {
+                headers : {
+                    Authorization : "Bearer " + token
+                }
+            }
+
+            console.log("-----------------",config)
+
+
+
+            const {status } = await axios.post("http://localhost:8000/api/product/create", userInput, config)
+             if (status === 201){
+                navigate("/")
+            }
+
+        } catch (err){
+            console.log(err)
+            console.log("+++++++++",e.message)
+        }
     }
 
     useEffect(() => {
